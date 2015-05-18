@@ -1,11 +1,3 @@
-# couchbase
-
-docker build -t=“bluemoon/couchbase” .
-
-docker run -i -t -d -p 8091:8091 -p 8092:8092 -p 11210:11210 --name mooncouch -v /vagrant:/vagrant:rw bluemoon/couchbase
-
-Dockerfile
-----
 FROM centos:centos6
 MAINTAINER Yoshi Sakai <info@bluemooninc.jp>
 
@@ -22,13 +14,14 @@ RUN yum install -y sudo
 RUN yum install -y tar
 RUN yum install -y wget
 
-#RUN wget $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
-ADD $CB_PACKAGE /tmp/$CB_PACKAGE
-RUN yum install -y /tmp/$CB_PACKAGE
-RUN rm -f /tmp/$CB_PACKAGE
+RUN wget $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
+RUN yum install -y $CB_PACKAGE
+## for download locale
+#ADD $CB_PACKAGE /tmp/$CB_PACKAGE
+#RUN yum install -y /tmp/$CB_PACKAGE
+#RUN rm -f /tmp/$CB_PACKAGE
 
 EXPOSE 8091 8092 11210
 
 # Add start script
 CMD /opt/couchbase/bin/couchbase-server start -- -noinput
-----
